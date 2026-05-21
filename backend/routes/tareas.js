@@ -44,7 +44,7 @@ router.put("/:id", async (req, res) => {
     const tareaActualizada = await Tarea.findByIdAndUpdate(
       id,
       { titulo, completado, categoria, prioridad },
-      { new: true } // devuelve la tarea ya actualizada
+      {  returnDocument: "after"  } // devuelve la tarea ya actualizada
     );
 
     if (!tareaActualizada) {
