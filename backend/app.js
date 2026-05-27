@@ -3,6 +3,9 @@
 // dotenv lee el archivo .env y carga las variables
 require("dotenv").config();
 
+// cors permite que el frontend en otro puerto pueda comunicarse con el backend
+const cors = require("cors");
+
 // express es el framework que crea el servidor
 const express = require("express");
 
@@ -11,6 +14,9 @@ const mongoose = require("mongoose");
 
 // Creamos la aplicación Express
 const app = express();
+
+// habilitamos cors para que React pueda hacer peticiones al backend sin ser bloqueado
+app.use(cors());
 
 // MIDDLEWARE
 // express.json() le permite a Express leer peticiones con cuerpo JSON
