@@ -1,16 +1,24 @@
 // Importamos el modelo para hablar con MongoDB
 const Tarea = require("../models/Tarea");
+const etag = require("etag");
 
-// Obtener todas las tareas
 // req = la petición que llega
 // res = la respuesta que enviamos
 const obtenerTareas = async (req, res) => {
   try {
     const tareas = await Tarea.find();
 
-    // Agregamos headers a la respuesta
-    // Content-Type indica que respondemos en JSON
-    // X-Total-Count indica cuantas tareas hay
+   // generamos la huella digital de los datos convertimos las tareas a texto para poder generar el ETag basado en su contenido
+    const et = etag(JSON.stringify(tareas));
+
+    // si el cliente manda un ETag igual al nuestro significa que los datos no cambiaron
+    if (req.headers["if-none-match"] === et) {
+      return res.status(304).end();
+    }
+
+    // agregamos los headers de caché
+    res.set("Cache-Control", "max-age=30"); // válido 30 segundos
+    res.set("ETag", et);                    // huella de los datos
     res.set("Content-Type", "application/json");
     res.set("X-Total-Count", tareas.length);
 
