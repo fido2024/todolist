@@ -1,6 +1,21 @@
 const Archivo = require("../models/Archivo");
 // path nos permite manejar rutas de archivos es una librería nativa de Node, no necesita instalarse
 const path = require("path");
+const fs = require("fs");
+
+// Listar todos los archivos
+const obtenerArchivos = async (req, res) => {
+  try {
+    const archivos = await Archivo.find();
+
+    res.set("Content-Type", "application/json");
+    res.set("X-Total-Count", archivos.length); // cuántos archivos hay
+    res.set("Cache-Control", "no-cache");       // siempre datos frescos
+    res.status(200).json(archivos);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener los archivos", error });
+  }
+};
 
 // Subir un archivo
 const subirArchivo = async (req, res) => {
@@ -60,9 +75,7 @@ const eliminarArchivo = async (req, res) => {
       return res.status(404).json({ mensaje: "Archivo no encontrado" });
     }
 
-    // fs nos permite eliminar el archivo físico de uploads/
-    // también es nativo de Node, no necesita instalarse
-    const fs = require("fs");
+    // eliminamos el archivo físico del servidor
     fs.unlinkSync(archivo.ruta);
 
     // eliminamos también los metadatos de MongoDB
@@ -76,6 +89,7 @@ const eliminarArchivo = async (req, res) => {
 };
 
 module.exports = {
+  obtenerArchivos,
   subirArchivo,
   descargarArchivo,
   eliminarArchivo,

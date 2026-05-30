@@ -1,11 +1,11 @@
 
 const { Router } = require("express");
 const router = Router();
-
 const multer = require("multer");
 const path = require("path");
 
 const {
+  obtenerArchivos,
   subirArchivo,
   descargarArchivo,
   eliminarArchivo,
@@ -31,9 +31,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// rutas para subir, descargar y eliminar archivos
-router.post("/", upload.single("archivo"), subirArchivo);
-router.get("/:id", descargarArchivo);
-router.delete("/:id", eliminarArchivo);
+// rutas
+router.get("/", obtenerArchivos);                        // listar todos
+router.post("/", upload.single("archivo"), subirArchivo); // subir
+router.get("/:id", descargarArchivo);                    // descargar
+router.delete("/:id", eliminarArchivo);                  // eliminar
 
 module.exports = router;
