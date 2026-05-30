@@ -2,6 +2,8 @@
 
 const { Router } = require("express");
 const router = Router();
+// importamos el middleware que protege las rutas
+const verificarToken = require("../middleware/verificarToken");
 
 // Aca importo todos los metodos del controller
 const {
@@ -12,11 +14,12 @@ const {
   eliminarTarea,
 } = require("../controllers/tareas");
 
-// se añadio un nuevo endpoint para cambiar solo el estado de la tarea, sin necesidad de enviar el titulo o descripcion
-router.get("/", obtenerTareas);
-router.post("/", crearTarea);
-router.put("/:id", actualizarTarea);
-router.patch("/:id", cambiarEstado);
-router.delete("/:id", eliminarTarea);
+// verificarToken protege todas las rutas
+// sin token válido no se puede acceder
+router.get("/", verificarToken, obtenerTareas);
+router.post("/", verificarToken, crearTarea);
+router.put("/:id", verificarToken, actualizarTarea);
+router.patch("/:id", verificarToken, cambiarEstado);
+router.delete("/:id", verificarToken, eliminarTarea);
 
 module.exports = router;

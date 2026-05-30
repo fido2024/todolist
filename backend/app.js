@@ -12,6 +12,8 @@ const cors = require("cors");
 // rutas
 const tareasRoutes = require("./routes/tareas");
 const archivosRoutes = require("./routes/archivos");
+const authRoutes = require("./routes/auth");
+
 
 // creamos la app
 const app = express();
@@ -23,6 +25,7 @@ app.use(express.json());
 // rutas
 app.use("/api/tareas", tareasRoutes);
 app.use("/api/archivos", archivosRoutes);
+app.use("/api/auth", authRoutes);
 
 // conexión a MongoDB y arranque del servidor
 const PORT = process.env.PORT || 3000;
