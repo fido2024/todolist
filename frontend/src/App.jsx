@@ -1,3 +1,5 @@
+//este archivo es el componente principal de la aplicación, donde se muestra la lista de tareas y el formulario para crear nuevas tareas
+
 import { useState, useEffect } from "react";
 import FormularioTarea from "./components/FormularioTarea";
 import Tarea from "./components/Tarea";

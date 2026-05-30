@@ -17,7 +17,7 @@ const obtenerTareas = async (req, res) => {
     }
 
     // agregamos los headers de caché
-    res.set("Cache-Control", "max-age=30"); // válido 30 segundos
+    res.set("Cache-Control", "no-cache"); // siempre verifica con el servidor usando ETag
     res.set("ETag", et);                    // huella de los datos
     res.set("Content-Type", "application/json");
     res.set("X-Total-Count", tareas.length);
