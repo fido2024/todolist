@@ -31,26 +31,36 @@ const App = () => {
 
   // obtiene todas las tareas del backend (GET)
   const obtenerTareas = async () => {
+    const token = localStorage.getItem("token"); // lee el token fresco
     const respuesta = await fetch("http://localhost:3000/api/tareas", {
       cache: "no-cache",
       headers: { Authorization: `Bearer ${token}` },
     });
+
+    // si el token expiró mandamos al login
+    if (respuesta.status === 401) {
+      cerrarSesion();
+      return;
+    }
+
     const datos = await respuesta.json();
     setTareas(datos);
   };
 
   // obtiene todos los archivos del backend (GET)
   const obtenerArchivos = async () => {
+    const token = localStorage.getItem("token"); // lee el token fresco
     const respuesta = await fetch("http://localhost:3000/api/archivos", {
       headers: { Authorization: `Bearer ${token}` },
     });
+
+    if (respuesta.status === 401) {
+      cerrarSesion();
+      return;
+    }
+
     const datos = await respuesta.json();
     setArchivos(datos);
-  };
-
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    setPantalla("login");
   };
 
   // mostramos login o registro según la pantalla
@@ -71,6 +81,12 @@ const App = () => {
       />
     );
   }
+
+// si estamos en la pantalla de la app, mostramos las tareas y archivos
+const cerrarSesion = () => {
+    localStorage.removeItem("token");
+    setPantalla("login");
+  };
 
 return (
     <div style={{ padding: "20px" }}>
