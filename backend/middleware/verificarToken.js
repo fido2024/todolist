@@ -1,31 +1,21 @@
-// Protege las rutas verificando que el token sea válido
+// Ahora estoy usando passport-jwt para verificar el token
 
-const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 const verificarToken = (req, res, next) => {
-  // el token viene en el header Authorization
-  // formato: "Bearer eyJhbGci..."
-  const authHeader = req.headers["authorization"];
+  passport.authenticate("jwt", { session: false }, (err, usuario) => {
+    if (err) {
+      return res.status(500).json({ mensaje: "Error del servidor" });
+    }
 
-  if (!authHeader) {
-    return res.status(401).json({ mensaje: "Token no proporcionado" });
-  }
+    if (!usuario) {
+      return res.status(401).json({ mensaje: "Token inválido o expirado" });
+    }
 
-  // separamos "Bearer" del token real
-  const token = authHeader.split(" ")[1];
-
-  try {
-    // verificamos que el token sea válido con JWT_SECRET
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // guardamos el id del usuario para usarlo en las rutas
-    req.usuarioId = decoded.id;
-
-    // next() permite continuar a la ruta protegida
+    // guardamos el usuario en req para usarlo en los controllers
+    req.usuario = usuario;
     next();
-  } catch (error) {
-    res.status(401).json({ mensaje: "Token inválido o expirado" });
-  }
+  })(req, res, next);
 };
 
 module.exports = verificarToken;

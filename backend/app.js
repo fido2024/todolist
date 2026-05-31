@@ -8,6 +8,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const passport = require("passport");
+require("./config/passport"); // carga la configuración de passport
 
 // rutas
 const tareasRoutes = require("./routes/tareas");
@@ -21,6 +23,7 @@ const app = express();
 // middlewares
 app.use(cors());
 app.use(express.json());
+app.use(passport.initialize()); // inicializa passport
 
 // rutas
 app.use("/api/tareas", tareasRoutes);
