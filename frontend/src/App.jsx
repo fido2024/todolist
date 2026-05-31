@@ -143,7 +143,7 @@ return (
 
         {/* columna derecha — archivos */}
         <div style={{ flex: 1, background: "white", padding: "32px" }}>
-          <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Archivos</h2>
+          <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Archivos Drive</h2>
           <FormularioArchivo onArchivoSubido={obtenerArchivos} token={token} />
           <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <ListaArchivos
