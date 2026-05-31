@@ -4,6 +4,14 @@ const mongoose = require("mongoose");
 // este es el esquema de la tarea, define como se ve cada tarea en la base de datos, con que datos
 const tareaSchema = new mongoose.Schema(
   {
+    usuario: {
+    // ObjectId es el tipo de id que usa MongoDB
+    // ref: "Usuario" indica que apunta al modelo Usuario
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+    required: true,
+    },
+
     titulo: {
       type: String,
       required: true,

@@ -2,40 +2,40 @@
 const Tarea = require("../models/Tarea");
 const etag = require("etag");
 
-// req = la petición que llega
-// res = la respuesta que enviamos
+// Obtener tareas del usuario autenticado
 const obtenerTareas = async (req, res) => {
   try {
-    const tareas = await Tarea.find();
+    // filtramos por usuario — solo sus tareas
+    const tareas = await Tarea.find({ usuario: req.usuario._id });
 
-   // generamos la huella digital de los datos convertimos las tareas a texto para poder generar el ETag basado en su contenido
     const et = etag(JSON.stringify(tareas));
-
-    // si el cliente manda un ETag igual al nuestro significa que los datos no cambiaron
     if (req.headers["if-none-match"] === et) {
       return res.status(304).end();
     }
 
-    // agregamos los headers de caché
-    res.set("Cache-Control", "no-cache"); // siempre verifica con el servidor usando ETag
-    res.set("ETag", et);                    // huella de los datos
+    res.set("Cache-Control", "no-cache");
+    res.set("ETag", et);
     res.set("Content-Type", "application/json");
     res.set("X-Total-Count", tareas.length);
-
     res.status(200).json(tareas);
   } catch (error) {
     res.status(500).json({ mensaje: "Error al obtener las tareas", error });
   }
 };
 
-// Crear una nueva tarea
+// Crear una nueva tarea asociada al usuario
 const crearTarea = async (req, res) => {
   try {
     const { titulo, categoria, prioridad } = req.body;
 
-    const nuevaTarea = new Tarea({ titulo, categoria, prioridad });
-    await nuevaTarea.save();
+    const nuevaTarea = new Tarea({
+      titulo,
+      categoria,
+      prioridad,
+      usuario: req.usuario._id, // asociamos la tarea al usuario
+    });
 
+    await nuevaTarea.save();
     res.set("Content-Type", "application/json");
     res.status(201).json(nuevaTarea);
   } catch (error) {
@@ -43,14 +43,15 @@ const crearTarea = async (req, res) => {
   }
 };
 
-// Actualizar una tarea existente
+// Actualizar una tarea del usuario
 const actualizarTarea = async (req, res) => {
   try {
     const { id } = req.params;
     const { titulo, completado, categoria, prioridad } = req.body;
 
-    const tareaActualizada = await Tarea.findByIdAndUpdate(
-      id,
+    // verificamos que la tarea pertenezca al usuario
+    const tareaActualizada = await Tarea.findOneAndUpdate(
+      { _id: id, usuario: req.usuario._id },
       { titulo, completado, categoria, prioridad },
       { returnDocument: "after" }
     );
@@ -66,35 +67,15 @@ const actualizarTarea = async (req, res) => {
   }
 };
 
-// Eliminar una tarea
-const eliminarTarea = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const tareaEliminada = await Tarea.findByIdAndDelete(id);
-
-    if (!tareaEliminada) {
-      return res.status(404).json({ mensaje: "Tarea no encontrada" });
-    }
-
-    res.set("Content-Type", "application/json");
-    res.status(200).json({ mensaje: "Tarea eliminada correctamente" });
-  } catch (error) {
-    res.status(500).json({ mensaje: "Error al eliminar la tarea", error });
-  }
-};
-
-// Actualizar solo el campo completado de una tarea
+// Cambiar solo el estado completado
 const cambiarEstado = async (req, res) => {
   try {
     const { id } = req.params;
-
-    // Solo tomamos completado del body
-    // no necesitamos los demás campos
     const { completado } = req.body;
 
-    const tareaActualizada = await Tarea.findByIdAndUpdate(
-      id,
+    // verificamos que la tarea pertenezca al usuario
+    const tareaActualizada = await Tarea.findOneAndUpdate(
+      { _id: id, usuario: req.usuario._id },
       { completado },
       { returnDocument: "after" }
     );
@@ -110,7 +91,28 @@ const cambiarEstado = async (req, res) => {
   }
 };
 
-//exportamos todos los metodos para usarlos en las rutas
+// Eliminar una tarea del usuario
+const eliminarTarea = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // verificamos que la tarea pertenezca al usuario
+    const tareaEliminada = await Tarea.findOneAndDelete({
+      _id: id,
+      usuario: req.usuario._id,
+    });
+
+    if (!tareaEliminada) {
+      return res.status(404).json({ mensaje: "Tarea no encontrada" });
+    }
+
+    res.set("Content-Type", "application/json");
+    res.status(200).json({ mensaje: "Tarea eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al eliminar la tarea", error });
+  }
+};
+
 module.exports = {
   obtenerTareas,
   crearTarea,

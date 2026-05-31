@@ -5,6 +5,14 @@ const mongoose = require("mongoose");
 
 const archivoSchema = new mongoose.Schema(
   {
+    usuario: {
+    // ObjectId es el tipo de id que usa MongoDB
+    // ref: "Usuario" indica que apunta al modelo Usuario
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+    required: true,
+    },
+
     // nombre original del archivo
     nombre: {
       type: String,
