@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-const FormularioArchivo = ({ onArchivoSubido }) => {
+const FormularioArchivo = ({ onArchivoSubido, token }) => {
   // guardamos el archivo seleccionado
   const [archivo, setArchivo] = useState(null);
 
@@ -16,7 +16,10 @@ const FormularioArchivo = ({ onArchivoSubido }) => {
 
     await fetch("http://localhost:3000/api/archivos", {
       method: "POST",
-      body: formData, // no usamos JSON aquí porque es un archivo
+      headers: { 
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
     });
 
     setArchivo(null);

@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-const FormularioTarea = ({ onTareaCreada }) => {
+const FormularioTarea = ({ onTareaCreada, token }) => {
 
   // guardamos lo que el usuario escribe
   const [titulo, setTitulo] = useState("");
@@ -17,7 +17,10 @@ const FormularioTarea = ({ onTareaCreada }) => {
     // enviamos la nueva tarea al backend
     await fetch("http://localhost:3000/api/tareas", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // agregamos el token
+      },
       body: JSON.stringify({ titulo, categoria, prioridad }),
     });
 
