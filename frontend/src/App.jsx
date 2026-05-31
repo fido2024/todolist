@@ -26,9 +26,7 @@ const App = () => {
       obtenerArchivos();
     }
   }, [pantalla]); // cada vez que cambie la pantalla, volvemos a cargar los datos
-  // obtenemos el token del localStorage para enviarlo en cada peticion
-  const token = localStorage.getItem("token");
-
+  
   // obtiene todas las tareas del backend (GET)
   const obtenerTareas = async () => {
     const token = localStorage.getItem("token"); // lee el token fresco
@@ -88,38 +86,74 @@ const cerrarSesion = () => {
     setPantalla("login");
   };
 
+// obtenemos el token del localStorage para enviarlo en cada peticion
+  const token = localStorage.getItem("token");
+
 return (
-    <div style={{ padding: "20px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h1>Mi TodoList</h1>
-        <button onClick={cerrarSesion}>Cerrar sesión</button>
+    <div style={{ minHeight: "100vh", background: "var(--fondo)" }}>
+
+      {/* header */}
+      <div style={{
+        padding: "20px 40px",
+        borderBottom: "1px solid var(--borde)",
+        background: "white",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}>
+        <h1 style={{ fontSize: "24px" }}>TodoList</h1>
+        <button
+          onClick={cerrarSesion}
+          style={{
+            padding: "8px 16px",
+            border: "1px solid var(--borde)",
+            borderRadius: "4px",
+            background: "transparent",
+            fontSize: "13px",
+            color: "var(--gris)",
+          }}
+        >
+          Cerrar sesión
+        </button>
       </div>
 
-      <div style={{ display: "flex", gap: "20px" }}>
+      {/* contenido principal */}
+      <div style={{
+        display: "flex",
+        gap: "1px",
+        background: "var(--borde)",
+        minHeight: "calc(100vh - 65px)",
+      }}>
+
         {/* columna izquierda — tareas */}
-        <div style={{ flex: 1 }}>
-          <h2>Tareas</h2>
+        <div style={{ flex: 1, background: "white", padding: "32px" }}>
+          <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Tareas</h2>
           <FormularioTarea onTareaCreada={obtenerTareas} token={token} />
-          {tareas.map((tarea) => (
-            <Tarea
-              key={tarea._id}
-              tarea={tarea}
-              onActualizada={obtenerTareas}
-              token={token}
-            />
-          ))}
+          <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            {tareas.map((tarea) => (
+              <Tarea
+                key={tarea._id}
+                tarea={tarea}
+                onActualizada={obtenerTareas}
+                token={token}
+              />
+            ))}
+          </div>
         </div>
 
         {/* columna derecha — archivos */}
-        <div style={{ flex: 1 }}>
-          <h2>Archivos</h2>
+        <div style={{ flex: 1, background: "white", padding: "32px" }}>
+          <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Archivos</h2>
           <FormularioArchivo onArchivoSubido={obtenerArchivos} token={token} />
-          <ListaArchivos
-            archivos={archivos}
-            onEliminado={obtenerArchivos}
-            token={token}
-          />
+          <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <ListaArchivos
+              archivos={archivos}
+              onEliminado={obtenerArchivos}
+              token={token}
+            />
+          </div>
         </div>
+
       </div>
     </div>
   );

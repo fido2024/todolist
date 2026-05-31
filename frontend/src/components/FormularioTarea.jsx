@@ -33,31 +33,63 @@ const FormularioTarea = ({ onTareaCreada, token }) => {
     onTareaCreada();
   };
 
+  const inputStyle = {
+    padding: "10px 14px",
+    border: "1px solid var(--borde)",
+    borderRadius: "4px",
+    fontSize: "14px",
+    outline: "none",
+    background: "var(--fondo)",
+  };
+
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
       <input
         type="text"
         placeholder="Nueva tarea..."
         value={titulo}
         onChange={(e) => setTitulo(e.target.value)}
+        style={{ ...inputStyle, width: "100%" }}
       />
+      <div style={{ display: "flex", gap: "8px" }}>
+        <select
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          style={{ ...inputStyle, flex: 1 }}
+        >
+          <option value="personal">Personal</option>
+          <option value="trabajo">Trabajo</option>
+          <option value="estudio">Estudio</option>
+          <option value="familia">Familia</option>
+          <option value="salud">Salud</option>
+          <option value="otros">Otros</option>
+        </select>
 
-      <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-        <option value="personal">Personal</option>
-        <option value="trabajo">Trabajo</option>
-        <option value="estudio">Estudio</option>
-        <option value="familia">Familia</option>
-        <option value="salud">Salud</option>
-        <option value="otros">Otros</option>
-      </select>
+        <select
+          value={prioridad}
+          onChange={(e) => setPrioridad(e.target.value)}
+          style={{ ...inputStyle, flex: 1 }}
+        >
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+        </select>
 
-      <select value={prioridad} onChange={(e) => setPrioridad(e.target.value)}>
-        <option value="baja">Baja</option>
-        <option value="media">Media</option>
-        <option value="alta">Alta</option>
-      </select>
-
-      <button onClick={crearTarea}>Agregar tarea</button>
+        <button
+          onClick={crearTarea}
+          style={{
+            padding: "10px 20px",
+            background: "var(--acento)",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "14px",
+            fontWeight: "500",
+          }}
+        >
+          Agregar
+        </button>
+      </div>
     </div>
   );
 };

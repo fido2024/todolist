@@ -26,13 +26,39 @@ const FormularioArchivo = ({ onArchivoSubido, token }) => {
     onArchivoSubido();
   };
 
-  return (
-    <div>
-      <input
-        type="file"
-        onChange={(e) => setArchivo(e.target.files[0])}
-      />
-      <button onClick={subirArchivo}>Subir archivo</button>
+ return (
+    <div style={{
+      padding: "16px",
+      border: "1px dashed var(--borde)",
+      borderRadius: "4px",
+      background: "var(--fondo)",
+    }}>
+      <p style={{ fontSize: "13px", color: "var(--gris)", marginBottom: "12px" }}>
+        Selecciona un archivo para subir
+      </p>
+
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <input
+          type="file"
+          onChange={(e) => setArchivo(e.target.files[0])}
+          style={{ fontSize: "13px", flex: 1 }}
+        />
+
+        <button
+          onClick={subirArchivo}
+          style={{
+            padding: "10px 20px",
+            background: "var(--acento)",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "14px",
+            fontWeight: "500",
+          }}
+        >
+          Subir
+        </button>
+      </div>
     </div>
   );
 };
