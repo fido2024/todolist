@@ -15,6 +15,7 @@ passport.use(
       usernameField: "email", // usamos email en lugar de username
       passwordField: "password",
     },
+
     async (email, password, done) => {
       try {
         // buscamos el usuario por email
@@ -38,7 +39,7 @@ passport.use(
   )
 );
 
-// JWT STRATEGY Verifica el token JWT en cada petición protegida reemplaza nuestro verificarToken.js manual
+// JWT STRATEGY Verifica el token JWT en cada petición protegida (como /api/tareas o /api/archivos)
 
 passport.use(
   new JwtStrategy(

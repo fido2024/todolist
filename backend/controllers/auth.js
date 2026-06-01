@@ -16,8 +16,9 @@ const registro = async (req, res) => {
       return res.status(400).json({ mensaje: "El email ya está registrado" });
     }
 
-    const passwordEncriptado = await bcrypt.hash(password, 10);
-
+    //aqui usamos bcrypt para encriptar la contraseña antes de guardarla en la base de datos, para que el usuario se sienta seguro al saber que su contraseña no se guarda en texto plano
+    const passwordEncriptado = await bcrypt.hash(password, 10); //10 es el estándar de seguridad recomendado para el salt rounds
+    
     const nuevoUsuario = new Usuario({
       nombre,
       email,
