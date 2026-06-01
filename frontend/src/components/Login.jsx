@@ -17,6 +17,7 @@ const Login = ({ onLoginExitoso, irARegistro }) => {
       body: JSON.stringify({ email, password }),
     });
 
+    //aqui recepcionamos la respuesta del backend, que puede ser un token si el login fue exitoso, o un mensaje de error si no lo fue
     const datos = await respuesta.json();
 
     if (respuesta.ok) {
