@@ -11,7 +11,7 @@ const Login = ({ onLoginExitoso, irARegistro }) => {
       return;
     }
 
-    const respuesta = await fetch("http://localhost:3000/api/auth/login", {
+    const respuesta = await fetch("https://localhost:3000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -20,6 +20,7 @@ const Login = ({ onLoginExitoso, irARegistro }) => {
     //aqui recepcionamos la respuesta del backend, que puede ser un token si el login fue exitoso, o un mensaje de error si no lo fue
     const datos = await respuesta.json();
 
+    // si el login fue exitoso, guardamos el token en localStorage para usarlo en futuras peticiones al backend, y llamamos a onLoginExitoso para cambiar a la pantalla principal de la app. Si el login no fue exitoso, mostramos el mensaje de error que viene del backend.
     if (respuesta.ok) {
       localStorage.setItem("token", datos.token);
       onLoginExitoso();

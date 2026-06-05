@@ -14,7 +14,7 @@ const FormularioArchivo = ({ onArchivoSubido, token }) => {
     const formData = new FormData();
     formData.append("archivo", archivo);
 
-    await fetch("http://localhost:3000/api/archivos", {
+    await fetch("https://localhost:3000/api/archivos", {
       method: "POST",
       headers: { 
         Authorization: `Bearer ${token}`,

@@ -11,7 +11,7 @@ const Tarea = ({ tarea, onActualizada, token }) => {
 
   // cambia el estado completado de la tarea (PATCH)
   const cambiarEstado = async () => {
-    await fetch(`http://localhost:3000/api/tareas/${tarea._id}`, {
+    await fetch(`https://localhost:3000/api/tareas/${tarea._id}`, {
       method: "PATCH",
       headers: { 
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ const Tarea = ({ tarea, onActualizada, token }) => {
 
   // elimina la tarea (DELETE)
   const eliminarTarea = async () => {
-    await fetch(`http://localhost:3000/api/tareas/${tarea._id}`, {
+    await fetch(`https://localhost:3000/api/tareas/${tarea._id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

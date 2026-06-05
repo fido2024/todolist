@@ -15,7 +15,7 @@ const FormularioTarea = ({ onTareaCreada, token }) => {
     if (!titulo) return;
 
     // enviamos la nueva tarea al backend
-    await fetch("http://localhost:3000/api/tareas", {
+    await fetch("https://localhost:3000/api/tareas", {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",

@@ -3,7 +3,7 @@
 const ListaArchivos = ({ archivos, onEliminado, token }) => {
 
   const eliminarArchivo = async (id) => {
-    await fetch(`http://localhost:3000/api/archivos/${id}`, {
+    await fetch(`https://localhost:3000/api/archivos/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -11,7 +11,7 @@ const ListaArchivos = ({ archivos, onEliminado, token }) => {
   };
 
  const descargarArchivo = async (id, nombre) => {
-    const respuesta = await fetch(`http://localhost:3000/api/archivos/${id}`, {
+    const respuesta = await fetch(`https://localhost:3000/api/archivos/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

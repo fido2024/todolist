@@ -2,3 +2,6 @@ node_modules
 .env
 uploads/*
 !uploads/.gitkeep
+key.pem
+cert.pem
+mkcert.exe

@@ -5,6 +5,8 @@
 require("dotenv").config();
 
 // librerías
+const https = require("https"); 
+const fs = require("fs");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -30,7 +32,12 @@ app.use("/api/tareas", tareasRoutes);
 app.use("/api/archivos", archivosRoutes);
 app.use("/api/auth", authRoutes);
 
-// conexión a MongoDB y arranque del servidor
+// leemos los certificados generados con mkcert
+const httpsOptions = {
+  key: fs.readFileSync("key.pem"),
+  cert: fs.readFileSync("cert.pem"),
+};
+
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -38,8 +45,9 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log("✅ Conectado a MongoDB Atlas");
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    // usamos https.createServer en lugar de app.listen
+    https.createServer(httpsOptions, app).listen(PORT, () => {
+      console.log(`🚀 Servidor corriendo en https://localhost:${PORT}`);
     });
   })
   .catch((error) => {

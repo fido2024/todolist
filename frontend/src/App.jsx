@@ -32,7 +32,7 @@ const App = () => {
   // obtiene todas las tareas del backend (GET)
   const obtenerTareas = async () => {
     const token = localStorage.getItem("token"); // lee el token fresco
-    const respuesta = await fetch("http://localhost:3000/api/tareas", {
+    const respuesta = await fetch("https://localhost:3000/api/tareas", {
       cache: "no-cache",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -50,7 +50,7 @@ const App = () => {
   // obtiene todos los archivos del backend (GET)
   const obtenerArchivos = async () => {
     const token = localStorage.getItem("token"); // lee el token fresco
-    const respuesta = await fetch("http://localhost:3000/api/archivos", {
+    const respuesta = await fetch("https://localhost:3000/api/archivos", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
