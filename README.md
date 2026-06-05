@@ -3,8 +3,6 @@
 Aplicación web de lista de tareas con gestión de archivos.
 Desarrollado con Node.js, Express, MongoDB Atlas y React.
 
-> ⚠️ Proyecto desarrollado con ayuda de Claude (Anthropic).
-> El código fue adaptado y comprendido por el estudiante.
 
 ---
 
