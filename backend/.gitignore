@@ -5,3 +5,4 @@ uploads/*
 key.pem
 cert.pem
 mkcert.exe
+mkcert.exe.exe
