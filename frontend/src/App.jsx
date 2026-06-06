@@ -13,9 +13,16 @@ import Registro from "./components/Registro";
 const App = () => {
   const [tareas, setTareas] = useState([]);
   const [archivos, setArchivos] = useState([]);
+  const [paginaTareas, setPaginaTareas] = useState(1);
+  
+  const [paginaArchivos, setPaginaArchivos] = useState(1);
+  
   // pantalla actual: "login", "registro", "app"
   const [pantalla, setPantalla] = useState("login");
-
+  
+  //aca podemos controlar cuantas tareas o archivos se muestran por página, si queremos mostrar mas, solo cambiamos este numero
+  const TAREAS_POR_PAGINA = 5; 
+  const ARCHIVOS_POR_PAGINA = 5;
   // al cargar verificamos si ya hay token guardado
   useEffect(() => {
     const token = localStorage.getItem("token"); //localStrategy o localstorage
@@ -29,6 +36,20 @@ const App = () => {
     }
   }, [pantalla]); // cada vez que cambie la pantalla, volvemos a cargar los datos
   
+  // si la página actual queda vacía después de eliminar, volvemos a la anterior
+  useEffect(() => {
+    if (paginaTareas > 1 && tareasPaginadas.length === 0) {
+    setPaginaTareas(p => p - 1);
+    }
+  }, [tareas]);
+
+    // igual para archivos
+  useEffect(() => {
+    if (paginaArchivos > 1 && archivosPaginados.length === 0) {
+    setPaginaArchivos(p => p - 1);
+    }
+  }, [archivos]);
+
   // obtiene todas las tareas del backend (GET)
   const obtenerTareas = async () => {
     const token = localStorage.getItem("token"); // lee el token fresco
@@ -91,6 +112,18 @@ const cerrarSesion = () => {
 // obtenemos el token del localStorage para enviarlo en cada peticion
   const token = localStorage.getItem("token");
 
+  const tareasPaginadas = tareas.slice(
+      (paginaTareas - 1) * TAREAS_POR_PAGINA,
+      paginaTareas * TAREAS_POR_PAGINA
+    );
+    const totalPaginasTareas = Math.ceil(tareas.length / TAREAS_POR_PAGINA);
+
+    const archivosPaginados = archivos.slice(
+      (paginaArchivos - 1) * ARCHIVOS_POR_PAGINA,
+      paginaArchivos * ARCHIVOS_POR_PAGINA
+    );
+  const totalPaginasArchivos = Math.ceil(archivos.length / ARCHIVOS_POR_PAGINA);
+
 return (
     <div style={{ minHeight: "100vh", background: "var(--fondo)" }}>
 
@@ -104,17 +137,14 @@ return (
         alignItems: "center",
       }}>
         <h1 style={{ fontSize: "24px" }}>TodoList</h1>
-        <button
-          onClick={cerrarSesion}
-          style={{
-            padding: "8px 16px",
-            border: "1px solid var(--borde)",
-            borderRadius: "4px",
-            background: "transparent",
-            fontSize: "13px",
-            color: "var(--gris)",
-          }}
-        >
+        <button onClick={cerrarSesion} style={{
+          padding: "8px 16px",
+          border: "1px solid var(--borde)",
+          borderRadius: "4px",
+          background: "transparent",
+          fontSize: "13px",
+          color: "var(--gris)",
+        }}>
           Cerrar sesión
         </button>
       </div>
@@ -132,15 +162,45 @@ return (
           <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Tareas</h2>
           <FormularioTarea onTareaCreada={obtenerTareas} token={token} />
           <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            {tareas.map((tarea) => (
-              <Tarea
-                key={tarea._id}
-                tarea={tarea}
-                onActualizada={obtenerTareas}
-                token={token}
-              />
+            {tareasPaginadas.map((tarea) => (
+              <Tarea key={tarea._id} tarea={tarea} onActualizada={obtenerTareas} token={token} />
             ))}
           </div>
+
+          {/* paginación tareas — solo aparece si hay más de 5 */}
+          {totalPaginasTareas > 1 && (
+            <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "16px" }}>
+              <button
+                onClick={() => setPaginaTareas(p => p - 1)}
+                disabled={paginaTareas === 1}
+                style={{
+                  padding: "6px 12px",
+                  border: "1px solid var(--borde)",
+                  borderRadius: "4px",
+                  background: "transparent",
+                  cursor: paginaTareas === 1 ? "not-allowed" : "pointer",
+                  color: paginaTareas === 1 ? "var(--gris)" : "var(--texto)",
+                }}
+              >← Anterior</button>
+
+              <span style={{ padding: "6px 12px", fontSize: "14px", color: "var(--gris)" }}>
+                {paginaTareas} / {totalPaginasTareas}
+              </span>
+
+              <button
+                onClick={() => setPaginaTareas(p => p + 1)}
+                disabled={paginaTareas === totalPaginasTareas}
+                style={{
+                  padding: "6px 12px",
+                  border: "1px solid var(--borde)",
+                  borderRadius: "4px",
+                  background: "transparent",
+                  cursor: paginaTareas === totalPaginasTareas ? "not-allowed" : "pointer",
+                  color: paginaTareas === totalPaginasTareas ? "var(--gris)" : "var(--texto)",
+                }}
+              >Siguiente →</button>
+            </div>
+          )}
         </div>
 
         {/* columna derecha — archivos */}
@@ -148,12 +208,43 @@ return (
           <h2 style={{ fontSize: "20px", marginBottom: "24px" }}>Archivos Drive</h2>
           <FormularioArchivo onArchivoSubido={obtenerArchivos} token={token} />
           <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <ListaArchivos
-              archivos={archivos}
-              onEliminado={obtenerArchivos}
-              token={token}
-            />
+            <ListaArchivos archivos={archivosPaginados} onEliminado={obtenerArchivos} token={token} />
           </div>
+
+          {/* paginación archivos — solo aparece si hay más de 5 */}
+          {totalPaginasArchivos > 1 && (
+            <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "16px" }}>
+              <button
+                onClick={() => setPaginaArchivos(p => p - 1)}
+                disabled={paginaArchivos === 1}
+                style={{
+                  padding: "6px 12px",
+                  border: "1px solid var(--borde)",
+                  borderRadius: "4px",
+                  background: "transparent",
+                  cursor: paginaArchivos === 1 ? "not-allowed" : "pointer",
+                  color: paginaArchivos === 1 ? "var(--gris)" : "var(--texto)",
+                }}
+              >← Anterior</button>
+
+              <span style={{ padding: "6px 12px", fontSize: "14px", color: "var(--gris)" }}>
+                {paginaArchivos} / {totalPaginasArchivos}
+              </span>
+
+              <button
+                onClick={() => setPaginaArchivos(p => p + 1)}
+                disabled={paginaArchivos === totalPaginasArchivos}
+                style={{
+                  padding: "6px 12px",
+                  border: "1px solid var(--borde)",
+                  borderRadius: "4px",
+                  background: "transparent",
+                  cursor: paginaArchivos === totalPaginasArchivos ? "not-allowed" : "pointer",
+                  color: paginaArchivos === totalPaginasArchivos ? "var(--gris)" : "var(--texto)",
+                }}
+              >Siguiente →</button>
+            </div>
+          )}
         </div>
 
       </div>
