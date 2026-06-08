@@ -44,7 +44,7 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log("✅ Conectado a MongoDB Atlas");
+    console.log("✅ Conectado a MongoDB:", MONGO_URI.includes("localhost") ? "Local (Docker)" : "Atlas");
     // usamos https.createServer en lugar de app.listen
     https.createServer(httpsOptions, app).listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en https://localhost:${PORT}`);

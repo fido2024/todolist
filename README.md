@@ -3,7 +3,6 @@
 Aplicación web de lista de tareas con gestión de archivos.
 Desarrollado con Node.js, Express, MongoDB Atlas y React.
 
-
 ---
 
 ## Requisitos previos
@@ -11,7 +10,8 @@ Desarrollado con Node.js, Express, MongoDB Atlas y React.
 Antes de clonar el proyecto asegúrate de tener instalado:
 
 - [Node.js](https://nodejs.org) v18 o superior
-- [MongoDB Atlas](https://cloud.mongodb.com) cuenta configurada
+- [MongoDB Atlas](https://cloud.mongodb.com) cuenta configurada (opcional, ver opción Docker)
+- [Docker](https://www.docker.com) para correr MongoDB localmente (opcional)
 - [Postman](https://www.postman.com) para probar la API (opcional)
 
 ---
@@ -67,6 +67,39 @@ Puede ser cualquier texto largo y seguro, por ejemplo:
 ```
 JWT_SECRET=miProyecto2026ClaveSecreta!
 ```
+
+---
+
+## Opción con Docker (MongoDB local)
+
+Si no tienes MongoDB Atlas puedes usar Docker para correr MongoDB localmente.
+El mismo comando funciona en Windows, Mac y Linux.
+
+### 1. Correr MongoDB con Docker
+
+```bash
+docker run -d -p 27017:27017 --name mongo mongo
+```
+
+### 2. Configurar el .env con MongoDB local
+
+```
+MONGO_URI=mongodb://localhost:27017/todolist
+PORT=3000
+JWT_SECRET=aqui_va_tu_clave_secreta
+```
+
+### 3. Cargar datos de prueba
+
+```bash
+cd backend
+node seed.js
+```
+
+> ⚠️ Nota: Si usas MongoDB Atlas en otra red y la conexión falla,
+> usa la cadena de conexión sin SRV:
+> `mongodb://usuario:password@host:27017/todolist`
+> en lugar de `mongodb+srv://...`
 
 ---
 

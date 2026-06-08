@@ -9,7 +9,7 @@ const Tarea = require("./models/Tarea");
 const cargarDatos = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ Conectado a MongoDB Atlas");
+    console.log("✅ Conectado a MongoDB para cargar datos de prueba");
 
     // limpiamos datos anteriores de prueba
     await Usuario.deleteMany({ email: "prueba@todolist.com" });
