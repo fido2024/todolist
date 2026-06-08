@@ -48,7 +48,7 @@ npm install
 Dentro de la carpeta `backend/` crea un archivo `.env` con estas variables:
 
 ```
-MONGO_URI=aqui_va_tu_string_de_conexion_de_mongodb_atlas
+MONGO_URI=aqui_va_tu_string_de_conexion_de_mongodb_atlas_o_docker_local
 PORT=3000
 JWT_SECRET=aqui_va_tu_clave_secreta_para_firmar_tokens
 ```
