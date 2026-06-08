@@ -77,7 +77,7 @@ El mismo comando funciona en Windows, Mac y Linux.
 
 ### 1. Correr MongoDB con Docker (Verifica que Docker Desktop este abierto antes de correrlo)
 
-Ese comando lo puedes correr desde cualquier carpeta.
+Este comando lo puedes correr desde cualquier carpeta.
 ```bash
 docker run -d -p 27017:27017 --name mongo mongo
 ```
