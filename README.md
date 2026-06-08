@@ -75,8 +75,8 @@ JWT_SECRET=miProyecto2026ClaveSecreta!
 Si no tienes MongoDB Atlas puedes usar Docker para correr MongoDB localmente.
 El mismo comando funciona en Windows, Mac y Linux.
 
-### 1. Correr MongoDB con Docker
-
+### 1. Correr MongoDB con Docker (Verifica que Docker Desktop este abierto antes de correrlo)
+# funciona desde cualquier lado Docker es un servicio global del sistema, no depende de la carpeta donde estés.
 ```bash
 docker run -d -p 27017:27017 --name mongo mongo
 ```
